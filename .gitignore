@@ -1,0 +1,17 @@
+# Ignore build artifacts (Cabal)
+dist/
+dist-newstyle/
+*.o
+*.hi
+*.exe
+
+# Cabal sandbox (if used)
+cabal.sandbox/
+cabal.project.local
+
+# Nix build result symlink
+result
+
+# Temporary files and logs
+*.log
+*.tmp
