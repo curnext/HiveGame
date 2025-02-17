@@ -6,9 +6,16 @@ build-type:         Simple
 executable HiveGame
     main-is:          Main.hs
     build-depends:    base
+                    , containers
                     , vty
                     , vty-crossplatform
-    other-modules:    Widget
+    other-modules:    BasicUI.UI
+                    , BasicUI.HEvent
+                    , BasicUI.Widget
+                    , BasicUI.MainWindow
+                    , GameWidget.Terminal
+                    , GameWidget.DebugPanel
+                    , GameWidget.EventPanel
                     , Game
     ghc-options:      -threaded -rtsopts -with-rtsopts=-N
     hs-source-dirs:   src
