@@ -16,6 +16,7 @@ import GameWidget.EventPanel
 debugPanel = MainWindow {
   mwContent = DebugPanel {
     dpName = "Debug Panel: Handled Events"
+  , dpSize = (0, 0)
   , dpLogLines = []
   }
 , mwID = "Debug Panel"
@@ -30,6 +31,7 @@ debugPanel = MainWindow {
 eventPanel = MainWindow {
   mwContent =   EventPanel {
     epName = "Event Panel: Unhandled Events"
+  , epSize = (0, 0)
   , epLogLines = []
   }
 , mwID = "Event Panel"

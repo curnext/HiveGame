@@ -71,7 +71,7 @@ tExitHandler = HMap $ \(e, t) -> case e of
 
 tResizeHandler  :: HMap Terminal
 tResizeHandler = HMap $ \(e, t) -> case e of
-  HEvent { hEvent = EvResize x y } -> (evClose e "[tResizeHandler]: ", t { tSize=(x,y) })
+  HEvent { hEvent = EvResize x y } -> (e, t { tSize=(x,y) })
   otherwise -> (e, t)
 
 tHandleFocusEvent :: HMap Terminal

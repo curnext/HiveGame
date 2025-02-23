@@ -37,6 +37,19 @@ instance (WidgetInWindow wiw) => Widget (MainWindow wiw) where
     <> mwBgPainter mw
 
 
+mwResizeHandler :: WidgetInWindow wiw => HMap (MainWindow wiw)
+mwResizeHandler = HMap $ \(e, mw) -> case e of
+  HEvent { hEvent = EvResize x y } ->
+    let
+      (sx, sy) = mwSize mw
+      e' = e { hEvent = EvResize (sx-2) (sy-2) }
+      wiw = mwContent mw
+      contentUpdater = wUpdater wiw
+      (e'', wiw') = runHMap contentUpdater (e', wiw)
+    in
+      (e'' { hEvent = EvResize x y }, mw { mwContent=wiw' })
+  otherwise -> (e, mw)
+
 mwDragHandler :: WidgetInWindow wiw => HMap (MainWindow wiw)
 mwDragHandler = HMap $ \(e, mw) ->
   case mwHasFocus mw of
@@ -70,12 +83,20 @@ mwDragHandler = HMap $ \(e, mw) ->
       
 mwContentEventHandler :: WidgetInWindow wiw => HMap (MainWindow wiw)
 mwContentEventHandler = HMap $ \(e, mw) ->
-      let
-        wiw = mwContent mw
-        contentUpdater = wUpdater wiw
-        (e', wiw') = runHMap contentUpdater (e, wiw)
-      in
-        (e', mw { mwContent=wiw' })
+  let
+    wiw = mwContent mw
+    contentUpdater = wUpdater wiw
+    (e', wiw') = case e of
+      HEvent { hEvent = EvResize x y } ->
+        let
+          (sx, sy) = mwSize mw
+          wiwe = e { hEvent = EvResize (sx-2) (sy-2) }
+          (wiwe', wiw') = runHMap contentUpdater (wiwe, wiw)
+        in
+          (wiwe' { hEvent = EvResize x y }, wiw')
+      otherwise -> runHMap contentUpdater (e, wiw)
+  in
+    (e', mw { mwContent=wiw' })
 
 mwExitHandler :: WidgetInWindow w => HMap (MainWindow w)
 mwExitHandler = HMap $ \(e, mw) ->
