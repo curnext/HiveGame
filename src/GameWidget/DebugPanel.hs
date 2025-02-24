@@ -28,7 +28,7 @@ instance WidgetInWindow DebugPanel where
 
 dpResizeHandler  :: HMap DebugPanel
 dpResizeHandler = HMap $ \(e, dp) -> case e of
-  HEvent { hEvent = EvResize x y } -> (e, dp { dpSize=(x,y), dpName = (show e) })
+  HEvent { hEvent = EvResize x y } -> (e, dp { dpSize=(x,y) })
   otherwise -> (e, dp)
 
 dpLogAllEvents :: HMap DebugPanel

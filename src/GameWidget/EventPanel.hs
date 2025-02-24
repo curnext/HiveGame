@@ -28,7 +28,7 @@ instance WidgetInWindow EventPanel where
 
 epResizeHandler  :: HMap EventPanel
 epResizeHandler = HMap $ \(e, ep) -> case e of
-  HEvent { hEvent = EvResize x y } -> (e, ep { epSize=(x,y), epName = (show e) })
+  HEvent { hEvent = EvResize x y } -> (e, ep { epSize=(x,y) })
   otherwise -> (e, ep)
 
 epLogAllEvents :: HMap EventPanel
