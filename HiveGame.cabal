@@ -13,6 +13,7 @@ executable HiveGame
                     , BasicUI.HEvent
                     , BasicUI.Widget
                     , BasicUI.MainWindow
+                    , Hive.Hid
                     , GameWidget.Terminal
                     , GameWidget.DebugPanel
                     , GameWidget.EventPanel
