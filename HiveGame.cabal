@@ -6,6 +6,7 @@ build-type:         Simple
 executable HiveGame
     main-is:          Main.hs
     build-depends:    base
+                    , bytestring
                     , containers
                     , vty
                     , vty-crossplatform
@@ -14,6 +15,7 @@ executable HiveGame
                     , BasicUI.Widget
                     , BasicUI.MainWindow
                     , Hive.Hid
+                    , Hive.Grid
                     , GameWidget.Terminal
                     , GameWidget.DebugPanel
                     , GameWidget.EventPanel

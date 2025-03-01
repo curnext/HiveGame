@@ -5,7 +5,7 @@ module Hive.Hid where
 -- T B L R H :: relative position, H for horizontal
 
 data CID = Cell Int Int
-  deriving (Eq, Ord) 
+  deriving (Eq, Ord, Show) 
 --            + + + +
 --           +       +
 --    + + + +  (0,1)  + + + +
@@ -24,7 +24,7 @@ data LID
   = LineT Int Int
   | LineL Int Int
   | LineR Int Int
-  deriving (Eq, Ord) 
+  deriving (Eq, Ord, Show) 
 --            + + + +
 --           +       +
 --    + + + +         + + + +
@@ -42,7 +42,7 @@ data LID
 data NID
   = NodeL Int Int
   | NodeR Int Int
-  deriving (Eq, Ord) 
+  deriving (Eq, Ord, Show) 
 --            + + + +
 --           +       +
 --    + + + +         + + + +
@@ -56,6 +56,9 @@ data NID
 --    + + + +         + + + +
 --           +       +
 --            + + + +
+
+data HID = HCell CID | HLine LID | HNode NID
+  deriving (Eq, Ord, Show) 
 
 -- Cell-to-Cell transformations
 c2cTR, c2cT, c2cTL, c2cBL, c2cB, c2cBR :: CID -> CID
