@@ -11,15 +11,18 @@ import BasicUI.MainWindow
 
 import GameWidget.DebugPanel
 import GameWidget.EventPanel
+import GameWidget.GameEdit
 
 import qualified Data.Map as Map
 import Data.List (nub)
+
 
 data Terminal = Terminal {
   tName         :: String
 , tSize         :: (Int, Int)
 , tDebugPanel   :: MainWindow DebugPanel
 , tEventPanel   :: MainWindow EventPanel
+, tGameEdit     :: MainWindow GameEdit
 , tSwIdList     :: [SwID]
 , tExit         :: Maybe Int
 }
@@ -28,7 +31,7 @@ instance Widget Terminal where
   wUpdater t = mempty
     <> tExitHandler
     <> tResizeHandler
-    <> tOnPressSpaceReveilHiddenWindows
+    <> tOnPressSpaceRevealHiddenWindows
     <> wcUpdater t
     <> tHandleFocusEvent
     <> HMap (\(e, t) -> (e, tLogStrLn ("__[ " ++ (show (_hID e)) ++ " ]____________________") t))
@@ -45,9 +48,11 @@ instance WidgetContainer Terminal where
     let
       ep = tEventPanel t
       dp = tDebugPanel t
+      ge = tGameEdit t
       mws = [
         (mwExit ep, mwID ep, wcRegister tEventPanel (\t c -> t { tEventPanel=c }))
         , (mwExit dp, mwID dp, wcRegister tDebugPanel (\t c -> t { tDebugPanel=c }))
+        , (mwExit ge, mwID ge, wcRegister tGameEdit (\t c -> t { tGameEdit=c }))
         ]
     in
       Map.fromList [(swID, updater)| (exit, swID, updater) <- mws, not exit]
@@ -56,9 +61,11 @@ instance WidgetContainer Terminal where
     let
       ep = tEventPanel t
       dp = tDebugPanel t
+      ge = tGameEdit t
       mws = [
         (mwExit ep, mwID ep, \t -> wPaint (tEventPanel t))
         , (mwExit dp, mwID dp, \t -> wPaint (tDebugPanel t))
+        , (mwExit ge, mwID ge, \t -> wPaint (tGameEdit t))
         ]
     in
       Map.fromList [(swID, painter)| (exit, swID, painter) <- mws, not exit]
@@ -79,22 +86,28 @@ tHandleFocusEvent = HMap $ \(e, t) ->
     let
       ep = tEventPanel t
       dp = tDebugPanel t
-      mws = map snd $ filter fst [ (mwHasFocus ep, mwID ep) , (mwHasFocus dp, mwID dp) ]
+      ge = tGameEdit t
+      mws = map snd $ filter fst [ (mwHasFocus ep, mwID ep)
+                                 , (mwHasFocus dp, mwID dp)
+                                 , (mwHasFocus ge, mwID ge)]
     in
       case mws of
         [] -> (e, t)
         swID:_ -> (e, t { tSwIdList=nub (swID:(tSwIdList t)) })
 
-tOnPressSpaceReveilHiddenWindows :: HMap Terminal
-tOnPressSpaceReveilHiddenWindows = HMap $ \(e, t) ->
+tOnPressSpaceRevealHiddenWindows :: HMap Terminal
+tOnPressSpaceRevealHiddenWindows = HMap $ \(e, t) ->
   case hEvent e of
     EvKey (KChar ' ') _ ->
       let
         dpmw = tDebugPanel t
         epmw = tEventPanel t
-        t' = t {tDebugPanel=dpmw{mwExit=False}, tEventPanel=epmw{mwExit=False}}
+        gemw = tGameEdit t
+        t' = t { tEventPanel=epmw{mwExit=False}
+               , tDebugPanel=dpmw{mwExit=False}
+               , tGameEdit=gemw{mwExit=False}}
       in
-        (evClose e "[tOnPressSpaceReveilHiddenWindows]: ", t')
+        (evClose e "[tOnPressSpaceRevealHiddenWindows]: ", t')
     otherwise -> (e, t)
 
 

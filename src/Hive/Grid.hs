@@ -5,6 +5,7 @@ import Hive.Hid
 import Data.Word(Word8)
 import qualified Data.ByteString as BS
 
+
 data HiveGridMapper = HiveGridMapper {
   cxyToHid :: (Int, Int) -> HID
 , cidToCxy :: CID -> (Int, Int)
@@ -73,11 +74,11 @@ s1MapperA = HiveGridMapper {
   cxyToHid = cxy2hid 1 $ BS.pack
     [0,0,9
     ,3,8,1]
-, cidToCxy = \(Cell x y) -> (3*x, x+2*y)
+, cidToCxy = \(Cell x y) -> (3*x, -x-2*y)
 , lidToCxy = const []
 , nidToCxy = \nid -> case nid of
-    NodeL x y -> (3*x-1, x+2*y-1)
-    NodeR x y -> (3*x+1, x+2*y-1)
+    NodeL x y -> (3*x-1, -x-2*y-1)
+    NodeR x y -> (3*x+1, -x-2*y-1)
 }
 
 -- S2:
@@ -101,14 +102,14 @@ s2MapperA = HiveGridMapper {
     ,0,0,0,4,1,1
     ,3,3,8,1,1,1
     ,2,2,2,5,1,1]
-, cidToCxy = \(Cell x y) -> (6*x, 2*x+4*y)
+, cidToCxy = \(Cell x y) -> (6*x, -2*x-4*y)
 , lidToCxy = \lid -> case lid of
-    LineT x y -> map (\i -> (6*x+i, 2*x+4*y-2)) [-1..1]
-    LineL x y -> [(6*x-3, 2*x+4*y-1)]
-    LineR x y -> [(6*x+3, 2*x+4*y+1)]
+    LineT x y -> map (\i -> (6*x+i, -2*x-4*y-2)) [-1..1]
+    LineL x y -> [(6*x-3, -2*x-4*y-1)]
+    LineR x y -> [(6*x+3, -2*x-4*y+1)]
 , nidToCxy = \nid -> case nid of
-    NodeL x y -> (6*x-2, 2*x+4*y-2)
-    NodeR x y -> (6*x+2, 2*x+4*y-2)
+    NodeL x y -> (6*x-2, -2*x-4*y-2)
+    NodeR x y -> (6*x+2, -2*x-4*y-2)
 }
 
 s2MapperB :: HiveGridMapper
@@ -149,16 +150,16 @@ s3MapperA = HiveGridMapper {
     ,3,3,3,8,1,1,1,1,1
     ,2,2,2,2,5,1,1,1,1
     ,2,2,2,2,2,5,1,1,1]
-, cidToCxy = \(Cell x y) -> (9*x, 3*x+6*y)
+, cidToCxy = \(Cell x y) -> (9*x, -3*x-6*y)
 , lidToCxy = \lid -> case lid of
-    LineT x y -> map (\i -> (9*x+i, 3*x+6*y-3)) [-2..2]
-    LineL x y -> [ (9*x-5, 3*x+6*y-1)
-                 , (9*x-4, 3*x+6*y-2)]
-    LineR x y -> [ (9*x+5, 3*x+6*y-1)
-                 , (9*x+4, 3*x+6*y-2)]
+    LineT x y -> map (\i -> (9*x+i, -3*x-6*y-3)) [-2..2]
+    LineL x y -> [ (9*x-5, -3*x-6*y-1)
+                 , (9*x-4, -3*x-6*y-2)]
+    LineR x y -> [ (9*x+5, -3*x-6*y-1)
+                 , (9*x+4, -3*x-6*y-2)]
 , nidToCxy = \nid -> case nid of
-    NodeL x y -> (9*x-3, 3*x+6*y-3)
-    NodeR x y -> (9*x+3, 3*x+6*y-3)
+    NodeL x y -> (9*x-3, -3*x-6*y-3)
+    NodeR x y -> (9*x+3, -3*x-6*y-3)
 }
 
 s3MapperB :: HiveGridMapper
@@ -209,18 +210,18 @@ s4MapperA = HiveGridMapper {
     ,2,2,2,2,2,5,1,1,1,1,1,1
     ,2,2,2,2,2,2,5,1,1,1,1,1
     ,2,2,2,2,2,2,2,5,1,1,1,1]
-, cidToCxy = \(Cell x y) -> (12*x, 4*x+8*y)
+, cidToCxy = \(Cell x y) -> (12*x, -4*x-8*y)
 , lidToCxy = \lid -> case lid of
-    LineT x y -> map (\i -> (12*x+i, 4*x+8*y-4)) [-3..3]
-    LineL x y -> [ (12*x-7, 4*x+8*y-1)
-                 , (12*x-6, 4*x+8*y-2)
-                 , (12*x-5, 4*x+8*y-3)]
-    LineR x y -> [ (12*x+7, 4*x+8*y-1)
-                 , (12*x+6, 4*x+8*y-2)
-                 , (12*x+5, 4*x+8*y-3)]
+    LineT x y -> map (\i -> (12*x+i, -4*x-8*y-4)) [-3..3]
+    LineL x y -> [ (12*x-7, -4*x-8*y-1)
+                 , (12*x-6, -4*x-8*y-2)
+                 , (12*x-5, -4*x-8*y-3)]
+    LineR x y -> [ (12*x+7, -4*x-8*y-1)
+                 , (12*x+6, -4*x-8*y-2)
+                 , (12*x+5, -4*x-8*y-3)]
 , nidToCxy = \nid -> case nid of
-    NodeL x y -> (12*x-4, 4*x+8*y-4)
-    NodeR x y -> (12*x+4, 4*x+8*y-4)
+    NodeL x y -> (12*x-4, -4*x-8*y-4)
+    NodeR x y -> (12*x+4, -4*x-8*y-4)
 }
 
 s4MapperB :: HiveGridMapper
